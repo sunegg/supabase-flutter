@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../supabase_flutter.dart';
 import 'supabase_state.dart';
 
 /// Interface for screen that requires an authenticated user
-abstract class SupabaseAuthRequiredState<T extends StatefulWidget>
+abstract class SupabaseAuthRequiredState<T extends ConsumerStatefulWidget>
     extends SupabaseState<T> with WidgetsBindingObserver {
   late final StreamSubscription<AuthChangeEvent> _authStateListener;
 

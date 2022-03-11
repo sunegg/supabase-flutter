@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class MockWidget extends StatefulWidget {
+class MockWidget extends ConsumerStatefulWidget {
   const MockWidget({Key? key}) : super(key: key);
 
   @override

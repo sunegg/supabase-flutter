@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Interface for screen that requires an authenticated user
-abstract class SupabaseState<T extends StatefulWidget> extends State<T> {
+abstract class SupabaseState<T extends ConsumerStatefulWidget>
+    extends ConsumerState<T> {
   @override
   void initState() {
     super.initState();
