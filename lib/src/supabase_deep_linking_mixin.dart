@@ -3,9 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uni_links/uni_links.dart';
-
-import '../supabase_flutter.dart';
 
 mixin SupabaseDeepLinkingMixin<T extends ConsumerStatefulWidget>
     on ConsumerState<T> {
@@ -28,14 +27,17 @@ mixin SupabaseDeepLinkingMixin<T extends ConsumerStatefulWidget>
     if (!kIsWeb) {
       // It will handle app links while the app is already started - be it in
       // the foreground or in the background.
-      _sub = uriLinkStream.listen((Uri? uri) {
-        if (mounted && uri != null) {
-          handleDeeplink(uri);
-        }
-      }, onError: (Object err) {
-        if (!mounted) return;
-        onErrorReceivingDeeplink(err.toString());
-      });
+      _sub = uriLinkStream.listen(
+        (Uri? uri) {
+          if (mounted && uri != null) {
+            handleDeeplink(uri);
+          }
+        },
+        onError: (Object err) {
+          if (!mounted) return;
+          onErrorReceivingDeeplink(err.toString());
+        },
+      );
     }
   }
 
