@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart';
 import 'package:supabase/supabase.dart';
-import 'package:supabase_flutter/src/constants.dart';
+
 import 'package:supabase_flutter/src/local_storage.dart';
 import 'package:supabase_flutter/src/supabase_auth.dart';
 
@@ -40,31 +39,26 @@ class Supabase {
   /// This must be called only once. If called more than once, an
   /// [AssertionError] is thrown
   static Future<Supabase> initialize({
-    required String url,
-    required String anonKey,
+    String? url,
+    String? anonKey,
     String? authCallbackUrlHostname,
     bool? debug,
     LocalStorage? localStorage,
-    Client? httpClient,
-    Map<String, String>? headers,
   }) async {
     assert(
       !_instance._initialized,
       'This instance is already initialized',
     );
-    _instance._init(
-      url,
-      anonKey,
-      httpClient: httpClient,
-      customHeaders: headers,
-    );
-    _instance._debugEnable = debug ?? kDebugMode;
-    _instance.log('***** Supabase init completed $_instance');
+    if (url != null && anonKey != null) {
+      _instance._init(url, anonKey);
+      _instance._debugEnable = debug ?? kDebugMode;
+      _instance.log('***** Supabase init completed $_instance');
 
-    await SupabaseAuth.initialize(
-      localStorage: localStorage ?? const HiveLocalStorage(),
-      authCallbackUrlHostname: authCallbackUrlHostname,
-    );
+      await SupabaseAuth.initialize(
+        localStorage: localStorage ?? const HiveLocalStorage(),
+        authCallbackUrlHostname: authCallbackUrlHostname,
+      );
+    }
 
     return _instance;
   }
@@ -77,7 +71,7 @@ class Supabase {
   /// The supabase client for this instance
   ///
   /// Throws an error if [Supabase.initialize] was not called.
-  late SupabaseClient client;
+  late final SupabaseClient client;
   bool _debugEnable = false;
 
   /// Dispose the instance to free up resources.
@@ -85,21 +79,10 @@ class Supabase {
     _initialized = false;
   }
 
-  void _init(
-    String supabaseUrl,
-    String supabaseAnonKey, {
-    Client? httpClient,
-    Map<String, String>? customHeaders,
-  }) {
-    final headers = {
-      ...Constants.defaultHeaders,
-      if (customHeaders != null) ...customHeaders
-    };
+  void _init(String supabaseUrl, String supabaseAnonKey) {
     client = SupabaseClient(
       supabaseUrl,
       supabaseAnonKey,
-      httpClient: httpClient,
-      headers: headers,
     );
     _initialized = true;
   }

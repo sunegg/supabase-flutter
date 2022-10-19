@@ -12,11 +12,11 @@ on:
 
 jobs:
   test:
-    name: Test / OS ${{ matrix.os }} / Flutter Version ${{ matrix.flutter-version }}
+    name: Test / OS ${{ matrix.os }} / Node ${{ matrix.node }}
     strategy:
       matrix:
         os: [ubuntu-latest]
-        flutter-version: ['3.x']
+        node: ["12"]
 
     runs-on: ${{ matrix.os }}
 
@@ -26,11 +26,10 @@ jobs:
 
       - uses: actions/setup-java@v1
         with:
-          java-version: '12.x'
+          java-version: "12.x"
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: ${{ matrix.flutter-version }}
-          channel: 'stable'
+          channel: "stable"
 
       - name: Install dependencies
         run: flutter pub get
